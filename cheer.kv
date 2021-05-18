@@ -1,0 +1,84 @@
+# :import kivy.uix.recycleview name RecycleView
+<DragLabel>:
+    id: drg_lbl
+    on_touch_down: self.delete_participant(args[1], drg_lbl)
+    canvas.before:
+        Color:
+            rgb: 0.1, 0.1, 0.1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<MainView>:
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        padding: 50
+
+        AreaCanvas:
+            size_hint: 0.73, 0.77
+            canvas.before:
+                Color:
+                    rgb: .1, .1, .1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'top'
+
+        BoxLayout:
+            padding: 0, 50, 10, 50
+            orientation: 'vertical'
+            size_hint: 0.25, 1
+
+            ParticipantsList:
+                id: prt_list
+                viewclass: 'DragLabel'
+                canvas.before:
+                    Color:
+                        rgb: .5, .5, .5
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    color: .5, .5, .5, 1
+                    spacing: 2
+
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 1, 0.3
+                spacing: 2
+
+                TextInput:
+                    id: txt_input
+                    multiline: False
+                    on_text_validate: root.add_participant(txt_input, prt_list, btn1, btn2, btn3)
+
+                BoxLayout:
+                    ToggleButton:
+                        id: btn1
+                        text: "База"
+                    ToggleButton:
+                        id: btn2
+                        text: "Маунтер"
+                    ToggleButton:
+                        id: btn3
+                        text: "Флаер"
+                Button:
+                    text: 'Сохранить участников'
+                    on_press: root.save_participants(prt_list)
+                Button:
+                    text: 'Очистить список'
+                    on_press: root.clear_list(prt_list)
